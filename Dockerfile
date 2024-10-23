@@ -1,18 +1,18 @@
 FROM alpine:3.14
 
 # 安装必要的软件包
-RUN apk add --no-cache wget tar bash curl jq certbot bind-tools openssl
+RUN apk add --no-cache wget tar bash curl jq certbot bind-tools openssl || { echo "Failed to install necessary packages"; exit 1; }
 
 # 安装阿里云 CLI
 RUN wget https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz && \
     tar xzvf aliyun-cli-linux-latest-amd64.tgz && \
     mv aliyun /usr/local/bin && \
-    rm aliyun-cli-linux-latest-amd64.tgz
+    rm aliyun-cli-linux-latest-amd64.tgz || { echo "Failed to install Aliyun CLI"; exit 1; }
 
 # 安装 Certbot DNS Aliyun Hook
 RUN wget https://cdn.jsdelivr.net/gh/justjavac/certbot-dns-aliyun@main/alidns.sh && \
     mv alidns.sh /usr/local/bin/alidns && \
-    chmod +x /usr/local/bin/alidns
+    chmod +x /usr/local/bin/alidns || { echo "Failed to install Certbot DNS Aliyun Hook"; exit 1; }
 
 # 复制 entrypoint 脚本
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh

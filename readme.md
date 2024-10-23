@@ -82,6 +82,23 @@ function decrypt(encryptedText, key, iv) {
 }
 ```
 
+### ⚠️ 潜在问题和故障排除步骤
+
+#### 1. 阿里云 CLI 配置失败
+**问题描述**: 在配置阿里云 CLI 时可能会失败。
+**解决方案**: 请检查 `ALIYUN_ACCESS_KEY_ID` 和 `ALIYUN_ACCESS_KEY_SECRET` 是否正确设置，并确保网络连接正常。
+
+#### 2. Certbot 证书申请或续订失败
+**问题描述**: 在申请或续订证书时可能会失败。
+**解决方案**: 请检查 `DOMAIN` 和 `EMAIL` 是否正确设置，并确保 DNS 记录已正确配置。如果使用了 `--test-cert` 标志，请确保在生产环境中移除该标志。
+
+#### 3. Webhook 发送失败
+**问题描述**: 在发送证书内容到 webhook 时可能会失败。
+**解决方案**: 请检查 `WEBHOOK_URL` 是否正确设置，并确保 webhook 服务可访问。如果使用了 `ENCRYPT_KEY`，请确保密钥正确设置。
+
+#### 4. 加密或解密失败
+**问题描述**: 在加密或解密证书内容时可能会失败。
+**解决方案**: 请检查 `ENCRYPT_KEY` 是否正确设置，并确保密钥格式正确。如果问题仍然存在，请检查加密和解密代码是否正确实现。
 
 ### 📂 使用项目
 https://github.com/justjavac/certbot-dns-aliyun

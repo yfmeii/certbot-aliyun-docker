@@ -18,10 +18,16 @@ renew_cert() {
     echo "检查是否存在证书目录"
     if [ ! -d "/etc/letsencrypt/live" ]; then
         echo "未找到现有证书目录，请求新的证书..." >> $LOG_FILE
-        certbot certonly -d "$DOMAIN" --manual --preferred-challenges dns --manual-auth-hook "alidns" --manual-cleanup-hook "alidns clean" --email "$EMAIL" --agree-tos $CERTBOT_FLAGS --deploy-hook /usr/local/bin/webhook.sh
+        if ! certbot certonly -d "$DOMAIN" --manual --preferred-challenges dns --manual-auth-hook "alidns" --manual-cleanup-hook "alidns clean" --email "$EMAIL" --agree-tos $CERTBOT_FLAGS --deploy-hook /usr/local/bin/webhook.sh; then
+            echo "Failed to request new certificate" >> $LOG_FILE
+            exit 1
+        fi
     else
         echo "找到现有证书目录，正在续订..." >> $LOG_FILE
-        certbot renew --manual --preferred-challenges dns --manual-auth-hook "alidns" --manual-cleanup-hook "alidns clean" --email "$EMAIL" --agree-tos $CERTBOT_FLAGS --deploy-hook /usr/local/bin/webhook.sh
+        if ! certbot renew --manual --preferred-challenges dns --manual-auth-hook "alidns" --manual-cleanup-hook "alidns clean" --email "$EMAIL" --agree-tos $CERTBOT_FLAGS --deploy-hook /usr/local/bin/webhook.sh; then
+            echo "Failed to renew certificate" >> $LOG_FILE
+            exit 1
+        fi
     fi
 }
 
